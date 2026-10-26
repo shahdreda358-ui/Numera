@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1220">
+  <title>Numerical Methods Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/mathjs@13.2.0/lib/browser/math.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="Numerical Methods Lab home">
+        <span class="brand-mark">∑</span>
+        <span><b>Numerical</b><small>METHODS LAB</small></span>
+      </a>
+      <div class="side-label">WORKSPACE</div>
+      <button class="nav-item active" data-target="calculator"><span>⌘</span> Calculator</button>
+      <button class="nav-item" data-target="guide"><span>▤</span> Quick guide</button>
+      <div class="sidebar-bottom">
+        <div class="status-dot"></div>
+        <div><b>Ready to calculate</b><small>Runs in your browser</small></div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">NUMERICAL ANALYSIS · TOOLKIT</p>
+          <h1>Numerical Methods <span>Calculator</span></h1>
+          <p class="subtitle">Solve equations, systems, and interpolation problems step by step.</p>
+        </div>
+        <div class="top-pill"><span class="pulse"></span> Interactive workspace</div>
+      </header>
+
+      <section id="calculator" class="workspace">
+        <div class="panel method-panel">
+          <div class="panel-heading">
+            <div><span class="step-number">01</span><h2>Choose a method</h2></div>
+            <span class="mini-label">10 METHODS</span>
+          </div>
+          <label for="methodSelect" class="field-label">Numerical method</label>
+          <select id="methodSelect">
+            <optgroup label="Root Finding">
+              <option value="bisection">Bisection Method</option>
+              <option value="falsePosition">False Position Method</option>
+              <option value="newton">Newton–Raphson Method</option>
+              <option value="secant">Secant Method</option>
+            </optgroup>
+            <optgroup label="Linear Systems">
+              <option value="gaussSeidel">Gauss–Seidel Method</option>
+              <option value="jacobi">Jacobi Method</option>
+            </optgroup>
+            <optgroup label="Interpolation">
+              <option value="newtonForward">Newton Forward Interpolation</option>
+              <option value="newtonBackward">Newton Backward Interpolation</option>
+              <option value="stirling">Stirling Interpolation</option>
+              <option value="lagrange">Lagrange Interpolation</option>
+            </optgroup>
+          </select>
+
+          <div id="methodDescription" class="method-description"></div>
+          <div class="section-divider"></div>
+          <form id="calculatorForm">
+            <div id="fields"></div>
+            <div class="button-row">
+              <button type="button" class="btn btn-ghost" id="resetBtn">Reset</button>
+              <button type="submit" class="btn btn-primary"><span>Calculate</span><span aria-hidden="true">↗</span></button>
+            </div>
+          </form>
+          <p class="tiny-note"><span>ⓘ</span> Use <code>*</code> for multiplication, e.g. <code>x^2 - 4</code>.</p>
+        </div>
+
+        <div class="results-column">
+          <section class="panel result-panel">
+            <div class="panel-heading">
+              <div><span class="step-number">02</span><h2>Result</h2></div>
+              <span id="resultBadge" class="result-badge">Waiting for input</span>
+            </div>
+            <div id="resultSummary" class="result-summary empty-state">
+              <div class="empty-icon">ƒ(x)</div>
+              <h3>Your result will appear here</h3>
+              <p>Choose a method, enter your values, then click <b>Calculate</b>.</p>
+            </div>
+            <div id="resultStats" class="stats-grid hidden"></div>
+          </section>
+
+          <section class="panel chart-panel">
+            <div class="panel-heading">
+              <div><span class="step-number">03</span><h2>Visualization</h2></div>
+              <span class="mini-label">PLOT</span>
+            </div>
+            <div class="chart-wrap"><canvas id="resultChart"></canvas></div>
+            <p id="chartHint" class="chart-hint">A graph will appear when the selected method supports visualization.</p>
+          </section>
+        </div>
+
+        <section class="panel table-panel">
+          <div class="panel-heading">
+            <div><span class="step-number">04</span><h2>Step-by-step table</h2></div>
+            <button id="downloadCsv" class="btn btn-small btn-ghost" disabled>↓ Export CSV</button>
+          </div>
+          <div id="tableWrap" class="table-wrap">
+            <div class="table-empty">Calculation steps will be listed here.</div>
+          </div>
+        </section>
+      </section>
+
+      <section id="guide" class="panel guide-panel hidden">
+        <div class="panel-heading"><div><span class="step-number">i</span><h2>Quick guide</h2></div></div>
+        <div class="guide-grid">
+          <article><h3>Root finding</h3><p>Enter a function using <code>x</code>. For Bisection and False Position, choose an interval <code>[a, b]</code> where the function changes sign. Newton–Raphson uses an initial guess; Secant uses two initial guesses.</p></article>
+          <article><h3>Linear systems</h3><p>Enter the coefficient matrix <code>A</code> one row per line and separate numbers with commas or spaces. Enter vector <code>b</code> in the same order. The initial guess defaults to zero.</p></article>
+          <article><h3>Interpolation</h3><p>Enter matching comma-separated <code>x</code> and <code>y</code> values, then the target <code>x</code>. Newton Forward, Newton Backward, and Stirling require equally spaced x-values; Lagrange does not.</p></article>
+          <article><h3>Function syntax</h3><p>Supported examples include <code>x^3 - 4*x - 9</code>, <code>sin(x)</code>, <code>exp(x)</code>, <code>sqrt(x)</code>, and <code>log(x)</code>. Use <code>pi</code> for π.</p></article>
+        </div>
+        <button class="btn btn-primary" id="backToCalculator">Back to calculator ↗</button>
+      </section>
+      <footer><span>Numerical Methods Lab</span><span>Built for learning · Results depend on input and tolerance</span></footer>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
